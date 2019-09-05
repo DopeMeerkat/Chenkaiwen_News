@@ -3,10 +3,12 @@ package com.java.chenkaiwen;
 import android.content.Context;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
+import android.net.Uri;
 import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
-//import android.support.v4.content.ContextCompat;
+import androidx.loader.app.LoaderManager;
+import androidx.loader.content.Loader;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import android.util.Log;
@@ -15,7 +17,13 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 import android.widget.Toast;
-public class BaseArticlesFragment extends Fragment {
+
+
+import java.util.List;
+
+public class BaseArticlesFragment extends Fragment
+//        implements LoaderManager.LoaderCallbacks<List<NewsObj>>
+{
 
     private static final String LOG_TAG = BaseArticlesFragment.class.getName();
 
@@ -28,11 +36,6 @@ public class BaseArticlesFragment extends Fragment {
         View rootView = inflater.inflate(R.layout.fragment_home, container, false);
 
         mSwipeRefreshLayout = rootView.findViewById(R.id.swipe_refresh);
-//        mSwipeRefreshLayout.setColorSchemeColors(
-//                ContextCompat.getColor(this.getContext(), R.color.refresh1),
-//                ContextCompat.getColor(this.getContext(), R.color.refresh2),
-//                ContextCompat.getColor(this.getContext(), R.color.refresh3),
-//                ContextCompat.getColor(this.getContext(), R.color.refresh4));
         mSwipeRefreshLayout.setColorSchemeColors(getResources().getColor(R.color.refresh1),
                 getResources().getColor(R.color.refresh2),
                 getResources().getColor(R.color.refresh3),
@@ -56,5 +59,17 @@ public class BaseArticlesFragment extends Fragment {
         NetworkInfo networkInfo = connectivityManager.getActiveNetworkInfo();
         return (networkInfo != null && networkInfo.isConnected());
     }
+
+//    @NonNull
+//    @Override
+//    public Loader<List<NewsObj>> onCreateLoader(int i, Bundle bundle) {
+//
+//        Uri.Builder uriBuilder = NewsPreferences.getPreferredUri(getContext());
+//
+//        Log.e(LOG_TAG,uriBuilder.toString());
+//
+//        // Create a new loader for the given URL
+//        return new NewsLoader(getActivity(), uriBuilder.toString());
+//    }
 
 }

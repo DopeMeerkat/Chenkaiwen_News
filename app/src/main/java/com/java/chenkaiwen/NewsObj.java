@@ -1,6 +1,6 @@
 package com.java.chenkaiwen;
 
-public class News {
+public class NewsObj {
     private String mTitle;
     private String mAuthor;
     private String mDate;
@@ -9,7 +9,7 @@ public class News {
     private String mTrailTextHtml;
     private boolean read;
 
-    public News(String title, String author, String date, String url, String thumbnail, String trailText) {
+    public NewsObj(String title, String author, String date, String url, String thumbnail, String trailText) {
         mTitle = title;
         mAuthor = author;
         mDate = date;

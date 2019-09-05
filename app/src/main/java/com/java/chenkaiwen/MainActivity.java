@@ -33,7 +33,6 @@ public class MainActivity extends AppCompatActivity
         toggle.syncState();
 
         viewPager = findViewById(R.id.viewpager);
-
         TabLayout tabLayout = findViewById(R.id.sliding_tabs);
         tabLayout.setupWithViewPager(viewPager);
         tabLayout.setTabGravity(TabLayout.GRAVITY_FILL);
@@ -43,9 +42,9 @@ public class MainActivity extends AppCompatActivity
         navigationView.setNavigationItemSelectedListener(this);
         onNavigationItemSelected(navigationView.getMenu().getItem(0).setChecked(true));
 
-//        CategoryFragmentPagerAdapter pagerAdapter =
-//                new CategoryFragmentPagerAdapter(this, getSupportFragmentManager());
-//        viewPager.setAdapter(pagerAdapter);
+        CategoryFragmentPagerAdapter pagerAdapter =
+                new CategoryFragmentPagerAdapter(this, getSupportFragmentManager());
+        //viewPager.setAdapter(pagerAdapter);
     }
 
     @Override

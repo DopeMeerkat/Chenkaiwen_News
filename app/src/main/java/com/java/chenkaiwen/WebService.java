@@ -26,15 +26,19 @@ public class WebService {
     public void setSize(String size) {
         this.size = size;
     }
+
     public void setStartDate(String startDate) {
         this.startDate = startDate;
     }
+
     public void setEndDate(String endDate) {
         this.endDate = endDate;
     }
+
     public void setWords(String words) {
         this.words = words;
     }
+
     public void setCategories(String categories) {
         this.categories = categories;
     }
@@ -48,7 +52,6 @@ public class WebService {
             conn.setRequestMethod("GET");
             conn.setRequestProperty("Content-Type", "application/json");
             conn.setRequestProperty("Accept-Charset", "utf-8");
-//            Log.d("CONNECTION", "AfterThere");
             if (conn.getResponseCode() != 200) {
                 Log.d("CONNECTION", "Error Connnection");
                 throw new RuntimeException("Failed : HTTP error code : " + conn.getResponseCode());
@@ -73,16 +76,18 @@ public class WebService {
 
     public String appendUri() throws URISyntaxException {
         Uri.Builder builder = new Uri.Builder();
-        builder.scheme("https")
-                .encodedAuthority("api2.newsminer.net")
-                .appendPath("svc")
-                .appendPath("news")
+        builder.scheme("https").encodedAuthority("api2.newsminer.net").appendPath("svc").appendPath("news")
                 .appendPath("queryNewsList");
-        if(this.size != null) builder.appendQueryParameter("size", this.size);
-        if(this.startDate != null) builder.appendQueryParameter("startDate", this.startDate);
-        if(this.endDate != null) builder.appendQueryParameter("endDate", this.endDate);
-        if(this.words != null) builder.appendQueryParameter("words", this.words);
-        if(this.categories != null) builder.appendQueryParameter("categories", this.categories);
+        if (this.size != null)
+            builder.appendQueryParameter("size", this.size);
+        if (this.startDate != null)
+            builder.appendQueryParameter("startDate", this.startDate);
+        if (this.endDate != null)
+            builder.appendQueryParameter("endDate", this.endDate);
+        if (this.words != null)
+            builder.appendQueryParameter("words", this.words);
+        if (this.categories != null)
+            builder.appendQueryParameter("categories", this.categories);
         String myUrl = builder.build().toString();
         Log.d("CONNECTION", myUrl);
         return myUrl;

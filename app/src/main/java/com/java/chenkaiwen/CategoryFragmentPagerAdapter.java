@@ -37,17 +37,17 @@ public class CategoryFragmentPagerAdapter extends FragmentPagerAdapter {
     public CharSequence getPageTitle(int position) {
         int titleResId;
         switch (position) {
-//            case 0:
-//                titleResId = R.string.menu_home;
-//                break;
+            case 0:
+                titleResId = R.string.menu_home;
+                break;
             case 1:
                 titleResId = R.string.menu_recommend;
                 break;
-            case 2:
-                titleResId = R.string.menu_history;
-                break;
+//            case 2:
+//                titleResId = R.string.menu_history;
+//                break;
             default:
-                titleResId = R.string.menu_home;
+                titleResId = R.string.menu_history;
                 break;
         }
         return mContext.getString(titleResId);
