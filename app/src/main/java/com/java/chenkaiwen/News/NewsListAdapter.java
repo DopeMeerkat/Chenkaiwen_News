@@ -21,6 +21,7 @@ import android.widget.TextView;
 import com.java.chenkaiwen.R;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
@@ -30,7 +31,7 @@ import com.bumptech.glide.Glide;
 public class NewsListAdapter extends RecyclerView.Adapter<NewsListAdapter.ViewHolder> {
     private Context mContext;
     private SharedPreferences sharedPrefs;
-    private List<News> mNews;
+    private List<News> mNews = Collections.emptyList();
     public NewsListAdapter(Context context) {
         mContext = context;
     }
@@ -43,8 +44,12 @@ public class NewsListAdapter extends RecyclerView.Adapter<NewsListAdapter.ViewHo
 
 //    @Override
 //    public int getItemCount() {
-//        return mNewsList.size();
+//        return mNews.size();
 //    }
+    public void setNews(List<News> news) {
+        mNews = news;
+        notifyDataSetChanged();
+    }
     @Override
     public int getItemCount() {
         if (mNews != null)
@@ -82,38 +87,50 @@ public class NewsListAdapter extends RecyclerView.Adapter<NewsListAdapter.ViewHo
 //        setTextSize(holder);
 
         final News currentNews = mNews.get(position);
+        holder.titleTextView.setTextSize(TypedValue.COMPLEX_UNIT_PX,
+                mContext.getResources().getDimension(R.dimen.sp22));
+        holder.authorTextView.setTextSize(TypedValue.COMPLEX_UNIT_PX,
+                mContext.getResources().getDimension(R.dimen.sp14));
+        holder.dateTextView.setTextSize(TypedValue.COMPLEX_UNIT_PX,
+                mContext.getResources().getDimension(R.dimen.sp14));
 
         holder.titleTextView.setText(currentNews.getTitle());
-        holder.articleTextView.setText(currentNews.getContent());
+        //holder.articleTextView.setText(currentNews.getContent());
+        holder.articleTextView.setVisibility(View.GONE);
+
         if (currentNews.getPublisher() == null) {
             holder.authorTextView.setVisibility(View.GONE);
         } else {
             holder.authorTextView.setVisibility(View.VISIBLE);
             holder.authorTextView.setText(currentNews.getPublisher());
         }
+        if(currentNews.isViewed()) {
+            holder.titleTextView.setTextColor(Color.GRAY);
+        } else {
+            holder.titleTextView.setTextColor(Color.BLACK);
+        }
+        //holder.dateTextView.setText(getTimeDifference(formatDate(currentNews.getPublishTime())));
+        holder.dateTextView.setText(currentNews.getPublishTime());
 
-        holder.dateTextView.setText(getTimeDifference(formatDate(currentNews.getPublishTime())));
 
+        holder.cardView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                // Convert the String URL into a URI object (to pass into the Intent constructor)
+                Uri newsUri = Uri.parse(currentNews.getUrl());
 
-//        holder.cardView.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                // Convert the String URL into a URI object (to pass into the Intent constructor)
-//                Uri newsUri = Uri.parse(currentNews.getUrl());
-//
-//                // Create a new intent to view the news URI
-//                Intent websiteIntent = new Intent(Intent.ACTION_VIEW, newsUri);
-//
-//                // Send the intent to launch a new activity
-//                mContext.startActivity(websiteIntent);
-//            }
-//        });
+                // Create a new intent to view the news URI
+                Intent websiteIntent = new Intent(Intent.ACTION_VIEW, newsUri);
 
-        if (currentNews.getImage() == null) {
+                // Send the intent to launch a new activity
+                mContext.startActivity(websiteIntent);
+            }
+        });
+
+        if (currentNews.getImage() == "") {
             holder.thumbnailImageView.setVisibility(View.GONE);
         } else {
             holder.thumbnailImageView.setVisibility(View.VISIBLE);
-            // Load thumbnail with glide
             Glide.with(mContext.getApplicationContext())
                     .load(currentNews.getImage())
                     .into(holder.thumbnailImageView);

@@ -112,6 +112,7 @@ public class WebService {
                 newsList.add(news);
             }
         }
+        Log.d("MakeList", "size = " + jsonArray.length());
         return newsList;
     }
 
@@ -137,6 +138,7 @@ public class WebService {
         News news = new News(
                 newsID, publishTime, image, category, video,
                 title, url, content, language,false,false, keywords);
+        //Log.d("News", newsID);
         return news;
     }
 }

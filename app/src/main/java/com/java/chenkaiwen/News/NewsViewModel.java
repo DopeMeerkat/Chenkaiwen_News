@@ -10,19 +10,19 @@ public class NewsViewModel extends AndroidViewModel {
 
     private NewsRepository mRepository;
 
-    private LiveData<List<News>> mAllWords;
+    private LiveData<List<News>> mAllNews;
 
     public NewsViewModel(Application application) {
         super(application);
         mRepository = new NewsRepository(application);
-        mAllWords = mRepository.getAllNews();
+        mAllNews = mRepository.getAllNews();
     }
 
-    LiveData<List<News>> getAllWords() {
-        return mAllWords;
+    public LiveData<List<News>> getAllNews() {
+        return mAllNews;
     }
 
-    void insert(News news) {
+    public void insert(News news) {
         mRepository.insert(news);
     }
 }
