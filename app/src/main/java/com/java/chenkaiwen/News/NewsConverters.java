@@ -2,7 +2,6 @@ package com.java.chenkaiwen.News;
 
 import androidx.room.TypeConverter;
 
-import com.example.news_app.Database.News.ListClasses.Keywords;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 

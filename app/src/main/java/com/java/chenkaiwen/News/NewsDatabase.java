@@ -1,5 +1,7 @@
 package com.java.chenkaiwen.News;
 
+import android.content.Context;
+import androidx.room.Room;
 import androidx.room.Database;
 import androidx.room.RoomDatabase;
 import androidx.room.TypeConverters;
@@ -9,15 +11,18 @@ import androidx.room.TypeConverters;
 public abstract class NewsDatabase extends RoomDatabase {
     public abstract NewsDao newsDao();
 
-//    private static NewsDatabase INSTANCE;
-//    private static final Object sLock = new Object();
-//
-//    public static NewsDatabase getInstance(Context context) {
-//        synchronized (sLock) {
-//            if (INSTANCE == null) {
-//                INSTANCE = Room.databaseBuilder(context.getApplicationContext(), NewsDatabase.class, "news.db").build();
-//            }
-//        }
-//        return INSTANCE;
-//    }
+    private static volatile NewsDatabase INSTANCE;
+
+    public static NewsDatabase getDatabase(final Context context) {
+        if (INSTANCE == null) {
+            synchronized (NewsDatabase.class) {
+                if (INSTANCE == null) {
+                    INSTANCE = Room.databaseBuilder(context.getApplicationContext(),
+                            NewsDatabase.class, "word_database")
+                            .build();
+                }
+            }
+        }
+        return INSTANCE;
+    }
 }

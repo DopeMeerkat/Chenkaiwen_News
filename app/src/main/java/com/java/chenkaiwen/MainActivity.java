@@ -44,7 +44,7 @@ public class MainActivity extends AppCompatActivity
 
         CategoryFragmentPagerAdapter pagerAdapter =
                 new CategoryFragmentPagerAdapter(this, getSupportFragmentManager());
-        //viewPager.setAdapter(pagerAdapter);
+        viewPager.setAdapter(pagerAdapter);
     }
 
     @Override

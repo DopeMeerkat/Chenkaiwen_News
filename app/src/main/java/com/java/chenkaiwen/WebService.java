@@ -6,6 +6,7 @@ import android.util.Log;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -15,6 +16,9 @@ import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URISyntaxException;
 import java.net.URL;
+import java.util.ArrayList;
+import java.util.List;
+import com.java.chenkaiwen.News.*;
 
 public class WebService {
     private String size;
@@ -43,7 +47,7 @@ public class WebService {
         this.categories = categories;
     }
 
-    public void connect() {
+    public String connect() {
         try {
             URL url = new URL(appendUri());
             HttpURLConnection conn = (HttpURLConnection) url.openConnection();
@@ -59,18 +63,20 @@ public class WebService {
             Log.d("CONNECTION", "Connection Successful");
             BufferedReader br = new BufferedReader(new InputStreamReader((conn.getInputStream())));
             String output = br.readLine();
-            Log.d("CONNECTION", output);
-            JSONObject json = new JSONObject(output);
-            Gson gson = new GsonBuilder().setPrettyPrinting().create();
-            String prettyData = gson.toJson(json.getJSONArray("data"));
-            Log.d("CONNECTION", prettyData);
             conn.disconnect();
+            return output;
+//            Log.d("CONNECTION", output);
+//            JSONObject json = new JSONObject(output);
+//            Gson gson = new GsonBuilder().setPrettyPrinting().create();
+//            String prettyData = gson.toJson(json.getJSONArray("data"));
+//            Log.d("CONNECTION", prettyData);
         } catch (URISyntaxException | IOException e) {
             Log.d("CONNECTION", e.toString());
             e.printStackTrace();
-        } catch (JSONException e) {
-            Log.d("CONNECTION", e.toString());
-            e.printStackTrace();
+//        } catch (JSONException e) {
+//            Log.d("CONNECTION", e.toString());
+//            e.printStackTrace();
+            return null;
         }
     }
 
@@ -91,5 +97,46 @@ public class WebService {
         String myUrl = builder.build().toString();
         Log.d("CONNECTION", myUrl);
         return myUrl;
+    }
+
+    public List<News> makeNewsList(String str) throws JSONException {
+        Gson gson = new Gson();
+        JSONObject js = new JSONObject(new String(str));
+        JSONArray jsonArray = js.getJSONArray("data");
+        List<News> newsList = new ArrayList<>();
+        for (int i = 0; i < jsonArray.length(); i ++)
+        {
+            JSONObject jsonObject = jsonArray.getJSONObject(i);
+            News news = jsonToNews(jsonObject);
+            if(news != null) {
+                newsList.add(news);
+            }
+        }
+        return newsList;
+    }
+
+    private News jsonToNews(JSONObject jsonObject) throws JSONException {
+        final String newsID = jsonObject.getString("newsID");
+        final String publishTime = jsonObject.getString("publishTime");
+        final String image = jsonObject.getString("image");
+        final String category = jsonObject.getString("category");
+        final String video = jsonObject.getString("video");
+        final String title = jsonObject.getString("title");
+        final String url = jsonObject.getString("url");
+        final String content = jsonObject.getString("content");
+        final String language = jsonObject.getString("language");
+
+        JSONArray jsonKeywords = jsonObject.getJSONArray("keywords");
+        List<Keywords> keywords = new ArrayList<>();
+        for(int i = 0; i < jsonKeywords.length(); i ++)
+        {
+            JSONObject tmp = jsonKeywords.getJSONObject(i);
+            Keywords keyword = new Keywords(tmp);
+            keywords.add(keyword);
+        }
+        News news = new News(
+                newsID, publishTime, image, category, video,
+                title, url, content, language,false,false, keywords);
+        return news;
     }
 }

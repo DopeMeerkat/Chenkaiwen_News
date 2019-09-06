@@ -6,7 +6,6 @@ import androidx.room.Ignore;
 import androidx.room.PrimaryKey;
 import androidx.room.TypeConverters;
 
-import com.example.news_app.Database.News.ListClasses.Keywords;
 
 import java.util.List;
 
@@ -15,16 +14,15 @@ public class News {
     @PrimaryKey
     @NonNull
     public String newsID;
-    public String publishTime;
+    public String url;
     public String image;
-    public String category;
+    public String publishTime;
+    public String language;
     public String video;
     public String title;
-    public String url;
     public String content;
     public String publisher;
-    public String language;
-    public String crawlTime;
+    public String category;
     public boolean saved;
     public boolean viewed;
 
@@ -56,15 +54,10 @@ public class News {
     public String getContent() {
         return content;
     }
-    public String getPublisher() {
-        return publisher;
-    }
     public String getLanguage() {
         return language;
     }
-    public String getCrawlTime() {
-        return crawlTime;
-    }
+    public String getPublisher() { return publisher; }
     public boolean isSaved() {
         return saved;
     }
@@ -87,6 +80,9 @@ public class News {
     public void setCategory(String category) {
         this.category = category;
     }
+    public void setPublisher(String publisher) {
+        this.publisher = publisher;
+    }
     public void setVideo(String video) {
         this.video = video;
     }
@@ -99,14 +95,8 @@ public class News {
     public void setContent(String content) {
         this.content = content;
     }
-    public void setPublisher(String publisher) {
-        this.publisher = publisher;
-    }
     public void setLanguage(String language) {
         this.language = language;
-    }
-    public void setCrawlTime(String crawlTime) {
-        this.crawlTime = crawlTime;
     }
     public void setSaved(boolean saved) {
         this.saved = saved;
@@ -127,9 +117,7 @@ public class News {
             String title,
             String url,
             String content,
-            String publisher,
             String language,
-            String crawlTime,
             boolean saved,
             boolean viewed,
             List<Keywords> keywords
@@ -138,13 +126,11 @@ public class News {
         this.setPublishTime(publishTime);
         this.setImage(image);
         this.setCategory(category);
-        this.setVideo(video); // TODO implement video open methods in front end
+        this.setVideo(video);
         this.setTitle(title);
         this.setUrl(url);
         this.setContent(content);
-        this.setPublisher(publisher);
         this.setLanguage(language);
-        this.setCrawlTime(crawlTime);
         this.setSaved(saved);
         this.setViewed(viewed);
         this.setKeywords(keywords);
