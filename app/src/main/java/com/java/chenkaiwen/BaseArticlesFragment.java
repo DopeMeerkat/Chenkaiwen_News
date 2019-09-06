@@ -14,9 +14,6 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.lifecycle.ViewModelProviders;
 import androidx.lifecycle.Observer;
-import androidx.lifecycle.ViewModelProviders;
-import android.content.Intent;
-import android.os.Bundle;
 import androidx.annotation.Nullable;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -34,13 +31,19 @@ import java.util.List;
 
 public class BaseArticlesFragment extends Fragment
 {
-
     private static final String LOG_TAG = BaseArticlesFragment.class.getName();
     private NewsListAdapter mAdapter;
     private TextView mEmptyStateTextView;
     private View mLoadingIndicator;
     private SwipeRefreshLayout mSwipeRefreshLayout;
     private NewsViewModel mNewsViewModel;
+
+    protected int mode = 0;
+    protected String size = "60";
+    protected String startDate;
+    protected String endDate;
+    protected String words;
+    protected String categories;
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -53,7 +56,7 @@ public class BaseArticlesFragment extends Fragment
         LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity());
         recyclerView.setLayoutManager(layoutManager);
         mNewsViewModel = ViewModelProviders.of(this).get(NewsViewModel.class);
-        mNewsViewModel.getAllNews().observe(this, new Observer<List<News>>() {
+        mNewsViewModel.getAllNews(mode).observe(this, new Observer<List<News>>() {
             @Override
             public void onChanged(@Nullable final List<News> News) {
                 mAdapter.setNews(News);
@@ -73,8 +76,11 @@ public class BaseArticlesFragment extends Fragment
                     try {
                         Log.d("Refresh", "Start refresh");
                         WebService webService = new WebService();
-                        webService.setSize("60");
-                        //webService.setWords("科技");
+                        if (size != null) { webService.setSize(size); }
+                        if (startDate != null) { webService.setSize(startDate); }
+                        if (endDate != null) { webService.setSize(endDate); }
+                        if (words != null) { webService.setSize(words); }
+                        if (categories != null) { webService.setSize(categories); }
                         String response = webService.connect();
                         List<News> list = webService.makeNewsList(response);
                         List<News> insertList = new ArrayList<>();
@@ -83,7 +89,7 @@ public class BaseArticlesFragment extends Fragment
                         {
                             //Log.d("refresh", "" + i);
                             if(newsDatabase.newsDao().getNewsByNewsID(list.get(i).newsID) == null) {
-                                Log.d("Refresh", "save " + list.get(i).newsID);
+                                Log.d("Refresh", "saved " + list.get(i).newsID);
                                 newsDatabase.newsDao().insertNews(list.get(i));
                             }
                         }

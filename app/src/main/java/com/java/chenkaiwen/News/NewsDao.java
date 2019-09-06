@@ -14,6 +14,15 @@ public interface NewsDao {
     @Query("SELECT * FROM News")
     LiveData<List<News>> getAll();
 
+    @Query("SELECT * FROM News WHERE category = :category")
+    LiveData<List<News>> getNewsByCategory(String category);
+
+    @Query("SELECT * FROM News WHERE viewed = :viewed")
+    LiveData<List<News>> getNewsByViewed(boolean viewed);
+
+    @Query("SELECT * FROM News WHERE viewed = :saved")
+    LiveData<List<News>> getNewsBySaved(boolean saved);
+
     @Query("SELECT * FROM News WHERE newsID = :newsID")
     public News getNewsByNewsID(String newsID);
 

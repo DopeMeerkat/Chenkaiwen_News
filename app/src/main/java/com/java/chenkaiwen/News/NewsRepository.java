@@ -22,6 +22,14 @@ class NewsRepository {
     LiveData<List<News>> getAllNews() {
         return mAllNews;
     }
+    LiveData<List<News>> getNewsByCategory(String category) {
+        mNewsDao.getNewsByCategory(category);
+        return mAllNews;
+    }
+    LiveData<List<News>> getNewsByViewed(boolean viewed) {
+        mNewsDao.getNewsByViewed(viewed);
+        return mAllNews;
+    }
 
     void insert(News News) {
         new insertAsyncTask(mNewsDao).execute(News);
