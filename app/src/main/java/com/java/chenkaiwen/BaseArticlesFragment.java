@@ -57,6 +57,7 @@ public class BaseArticlesFragment extends Fragment
 
     int getMode()
     {
+        if(mode == 1 && getCategories() == null) return 0;
         return mode;
     }
     String getSize()

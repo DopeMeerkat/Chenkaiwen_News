@@ -15,7 +15,6 @@ public class NewsConverters {
         if (data == null) {
             return Collections.emptyList();
         }
-
         Type keywords = new TypeToken<List<Keywords>>(){}.getType();
         return new Gson().fromJson(data, keywords);
     }
