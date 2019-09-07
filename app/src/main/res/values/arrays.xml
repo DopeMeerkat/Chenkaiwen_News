@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<resources>
+    <!--  for the human-readable labels -->
+    <string-array name="settings_news_preference">
+        <item>@string/settings_all_label</item>
+        <item>@string/settings_entertainment_label</item>
+        <item>@string/settings_military_label</item>
+        <item>@string/settings_education_label</item>
+        <item>@string/settings_culture_label</item>
+        <item>@string/settings_health_label</item>
+        <item>@string/settings_finance_label</item>
+        <item>@string/settings_sports_label</item>
+        <item>@string/settings_automobile_label</item>
+        <item>@string/settings_technology_label</item>
+        <item>@string/settings_society_label</item>
+    </string-array>
+
+</resources>

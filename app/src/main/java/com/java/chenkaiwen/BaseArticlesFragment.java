@@ -1,6 +1,7 @@
 package com.java.chenkaiwen;
 
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.net.Uri;
@@ -15,6 +16,8 @@ import androidx.recyclerview.widget.RecyclerView;
 import androidx.lifecycle.ViewModelProviders;
 import androidx.lifecycle.Observer;
 import androidx.annotation.Nullable;
+
+import android.preference.PreferenceManager;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -37,18 +40,48 @@ public class BaseArticlesFragment extends Fragment
     private View mLoadingIndicator;
     private SwipeRefreshLayout mSwipeRefreshLayout;
     private NewsViewModel mNewsViewModel;
+    private SharedPreferences sharedPrefs;
 
-    protected int mode = 0;
-    protected String size = "60";
-    protected String startDate;
-    protected String endDate;
-    protected String words;
-    protected String categories;
+    private int mode = 0;
+    private String size = "60";
+    private String startDate = "2019-01-01";
+    private String endDate = "2019-09-01";
+    private String words;
+    private String categories;
+
+    int getMode()
+    {
+        return mode;
+    }
+    String getSize()
+    {
+        return size;
+    }
+    String getStartDate()
+    {
+        return startDate;
+    }
+    String getEndDate()
+    {
+        return endDate;
+    }
+    String getWords()
+    {
+        return words;
+    }
+    String getCategories()
+    {
+        String category = sharedPrefs.getString(getContext().getString(R.string.settings_filter_key),
+                getContext().getString(R.string.settings_all_label));
+        if (category.equals(getContext().getString(R.string.settings_all_label))) return null;
+        return category;
+    }
+
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_home, container, false);
-
+        sharedPrefs = PreferenceManager.getDefaultSharedPreferences(getContext());
         RecyclerView recyclerView = rootView.findViewById(R.id.recycler_view);
         //final NewsListAdapter adapter = new NewsListAdapter(getActivity());
         mAdapter = new NewsListAdapter(getActivity());
@@ -56,7 +89,7 @@ public class BaseArticlesFragment extends Fragment
         LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity());
         recyclerView.setLayoutManager(layoutManager);
         mNewsViewModel = ViewModelProviders.of(this).get(NewsViewModel.class);
-        mNewsViewModel.getAllNews(mode).observe(this, new Observer<List<News>>() {
+        mNewsViewModel.getAllNews(getMode()).observe(this, new Observer<List<News>>() {
             @Override
             public void onChanged(@Nullable final List<News> News) {
                 mAdapter.setNews(News);
@@ -74,33 +107,32 @@ public class BaseArticlesFragment extends Fragment
                 Log.i(LOG_TAG, "onRefresh called from SwipeRefreshLayout");
                 Runnable runnable_update = () -> {
                     try {
+                        //mNewsViewModel.deleteAll();
                         Log.d("Refresh", "Start refresh");
                         WebService webService = new WebService();
-                        if (size != null) { webService.setSize(size); }
-                        if (startDate != null) { webService.setSize(startDate); }
-                        if (endDate != null) { webService.setSize(endDate); }
-                        if (words != null) { webService.setSize(words); }
-                        if (categories != null) { webService.setSize(categories); }
+                        if (getSize() != null) { webService.setSize(getSize()); }
+                        if (getStartDate() != null) { webService.setStartDate(getStartDate()); }
+                        if (getEndDate() != null) { webService.setEndDate(getEndDate()); }
+                        if (getWords() != null) { webService.setWords(getWords()); }
+                        if (getCategories() != null) { webService.setCategories(getCategories()); }
                         String response = webService.connect();
                         List<News> list = webService.makeNewsList(response);
                         List<News> insertList = new ArrayList<>();
                         NewsDatabase newsDatabase = NewsDatabase.getDatabase(getContext());
-                        for (int i = 0; i < list.size(); i ++)
-                        {
+                        for (int i = 0; i < list.size(); i ++) {
                             //Log.d("refresh", "" + i);
-                            if(newsDatabase.newsDao().getNewsByNewsID(list.get(i).newsID) == null) {
-                                Log.d("Refresh", "saved " + list.get(i).newsID);
+                            if (newsDatabase.newsDao().getNewsByNewsID(list.get(i).newsID) == null) {
+                                //Log.d("Refresh", "saved " + list.get(i).newsID);
                                 newsDatabase.newsDao().insertNews(list.get(i));
                             }
                         }
-                        //adapter.setNews()
                     } catch (Exception e){
                         Log.d("Refresh", e.toString());
                     }
                 };
                 mSwipeRefreshLayout.setRefreshing(false);
                 new Thread(runnable_update).start();
-                Toast.makeText(getActivity(), "Updated",
+                Toast.makeText(getActivity(), "Connection Success",
                         Toast.LENGTH_SHORT).show();
             }
         });

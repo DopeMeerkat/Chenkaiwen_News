@@ -18,6 +18,8 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.VideoView;
+
 import com.java.chenkaiwen.R;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -50,6 +52,9 @@ public class NewsListAdapter extends RecyclerView.Adapter<NewsListAdapter.ViewHo
         mNews = news;
         notifyDataSetChanged();
     }
+    public void changed() {
+        notifyDataSetChanged();
+    }
     @Override
     public int getItemCount() {
         if (mNews != null)
@@ -63,6 +68,7 @@ public class NewsListAdapter extends RecyclerView.Adapter<NewsListAdapter.ViewHo
         private TextView authorTextView;
         private TextView dateTextView;
         private ImageView thumbnailImageView;
+        private VideoView videoView;
         private Button shareButton;
         private CardView cardView;
 
@@ -73,6 +79,7 @@ public class NewsListAdapter extends RecyclerView.Adapter<NewsListAdapter.ViewHo
             authorTextView = itemView.findViewById(R.id.card_author);
             dateTextView = itemView.findViewById(R.id.card_date);
             thumbnailImageView = itemView.findViewById(R.id.card_image);
+            videoView = itemView.findViewById(R.id.card_video);
             shareButton = itemView.findViewById(R.id.card_share);
             cardView = itemView.findViewById(R.id.card_view);
         }
@@ -91,13 +98,14 @@ public class NewsListAdapter extends RecyclerView.Adapter<NewsListAdapter.ViewHo
                 mContext.getResources().getDimension(R.dimen.sp22));
         holder.authorTextView.setTextSize(TypedValue.COMPLEX_UNIT_PX,
                 mContext.getResources().getDimension(R.dimen.sp14));
+        holder.articleTextView.setTextSize(TypedValue.COMPLEX_UNIT_PX,
+                mContext.getResources().getDimension(R.dimen.sp16));
         holder.dateTextView.setTextSize(TypedValue.COMPLEX_UNIT_PX,
                 mContext.getResources().getDimension(R.dimen.sp14));
 
         holder.titleTextView.setText(currentNews.getTitle());
-        //holder.articleTextView.setText(currentNews.getContent());
-        holder.articleTextView.setVisibility(View.GONE);
-
+        holder.articleTextView.setText(currentNews.getTrailText());
+        //holder.articleTextView.setVisibility(View.VISIBLE);
         if (currentNews.getPublisher() == null) {
             holder.authorTextView.setVisibility(View.GONE);
         } else {
@@ -116,24 +124,35 @@ public class NewsListAdapter extends RecyclerView.Adapter<NewsListAdapter.ViewHo
         holder.cardView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                // Convert the String URL into a URI object (to pass into the Intent constructor)
-                Uri newsUri = Uri.parse(currentNews.getUrl());
-
-                // Create a new intent to view the news URI
-                Intent websiteIntent = new Intent(Intent.ACTION_VIEW, newsUri);
-
-                // Send the intent to launch a new activity
-                mContext.startActivity(websiteIntent);
+                //Log.d("NewsAdapter", "clicked");
+                mNews.get(position).setViewed(true);
+                notifyDataSetChanged();
+//                Uri newsUri = Uri.parse(currentNews.getUrl());
+//                Intent websiteIntent = new Intent(Intent.ACTION_VIEW, newsUri);
+//                mContext.startActivity(websiteIntent);
             }
         });
 
-        if (currentNews.getImage() == "") {
+        if (currentNews.getImage().equals("")) {
             holder.thumbnailImageView.setVisibility(View.GONE);
         } else {
+            //Log.d("Adapter", currentNews.getNewsID() + " has image");
             holder.thumbnailImageView.setVisibility(View.VISIBLE);
+//            Picasso.get()
+//                    .load(currentNews.getImage())
+//                    .resize((int)mContext.getResources().getDimension(R.dimen.thumbnail_image_width), (int)mContext.getResources().getDimension(R.dimen.thumbnail_image_width))
+//                    .centerCrop()
+//                    .into(holder.thumbnailImageView);
             Glide.with(mContext.getApplicationContext())
                     .load(currentNews.getImage())
+                    .override((int)mContext.getResources().getDimension(R.dimen.thumbnail_image_width), (int)mContext.getResources().getDimension(R.dimen.thumbnail_image_width))
                     .into(holder.thumbnailImageView);
+        }
+        if (currentNews.getImage().equals("") && !currentNews.getVideo().equals("")) {
+            holder.videoView.setVisibility(View.VISIBLE);
+        } else {
+            holder.videoView.setVisibility(View.GONE);
+            //TODO
         }
 
 

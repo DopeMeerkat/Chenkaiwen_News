@@ -42,10 +42,15 @@
 
                 <ImageView
                     android:id="@+id/card_image"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_alignParentEnd="true"
-                    tools:srcCompat="@tools:sample/avatars[3]" />
+                    android:layout_width="@dimen/thumbnail_image_width"
+                    android:layout_height="@dimen/thumbnail_image_height"
+                    android:layout_alignParentEnd="true" />
+
+                <VideoView
+                    android:id="@+id/card_video"
+                    android:layout_width="@dimen/thumbnail_image_width"
+                    android:layout_height="@dimen/thumbnail_image_height"
+                    android:layout_alignParentEnd="true" />
 
             </RelativeLayout>
 

@@ -119,14 +119,36 @@ public class WebService {
     private News jsonToNews(JSONObject jsonObject) throws JSONException {
         final String newsID = jsonObject.getString("newsID");
         final String publishTime = jsonObject.getString("publishTime");
-        final String image = jsonObject.getString("image");
+        String imgtxt = jsonObject.getString("image");
         final String category = jsonObject.getString("category");
         final String video = jsonObject.getString("video");
         final String title = jsonObject.getString("title");
         final String url = jsonObject.getString("url");
         final String content = jsonObject.getString("content");
         final String language = jsonObject.getString("language");
-
+        int close = imgtxt.indexOf(",");
+        if (close == -1){ close = imgtxt.indexOf("]");}
+//        String image = "[";
+//        image = image + imgtxt.substring(1, close);
+//        image = image + "]";
+        String image = "";
+        if (!imgtxt.equals("[]"))
+        {
+            image = imgtxt.substring(1, close);
+        }
+//        Log.d("MakeNews", image);
+        String trailText = "";
+        int len = content.length();
+        if (len > 100) len = 100;
+//        Log.d("MakeNews", ""+len);
+//        Log.d("MakeNews", arr[0]);
+        for (int i = 0; i < len; i ++) {
+            if(content.charAt(i) != '\t' && content.charAt(i) != '\n' && content.charAt(i) != ' ') {
+                trailText = trailText + content.charAt(i);
+            }
+        }
+        trailText = trailText + "...";
+//        Log.d("MakeNews", trailText);
         JSONArray jsonKeywords = jsonObject.getJSONArray("keywords");
         List<Keywords> keywords = new ArrayList<>();
         for(int i = 0; i < jsonKeywords.length(); i ++)
@@ -137,7 +159,7 @@ public class WebService {
         }
         News news = new News(
                 newsID, publishTime, image, category, video,
-                title, url, content, language,false,false, keywords);
+                title, url, content, trailText, language,false,false, keywords);
         //Log.d("News", newsID);
         return news;
     }

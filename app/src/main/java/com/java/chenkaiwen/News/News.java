@@ -5,6 +5,7 @@ import androidx.room.Entity;
 import androidx.room.Ignore;
 import androidx.room.PrimaryKey;
 import androidx.room.TypeConverters;
+import android.util.Log;
 
 
 import java.util.List;
@@ -21,6 +22,7 @@ public class News {
     public String video;
     public String title;
     public String content;
+    public String trailText;
     public String publisher;
     public String category;
     public boolean saved;
@@ -54,6 +56,7 @@ public class News {
     public String getContent() {
         return content;
     }
+    public String getTrailText() { return trailText; }
     public String getLanguage() {
         return language;
     }
@@ -95,6 +98,9 @@ public class News {
     public void setContent(String content) {
         this.content = content;
     }
+    public void setTrailText(String trailText) {
+        this.trailText = trailText;
+    }
     public void setLanguage(String language) {
         this.language = language;
     }
@@ -117,6 +123,7 @@ public class News {
             String title,
             String url,
             String content,
+            String trailText,
             String language,
             boolean saved,
             boolean viewed,
@@ -130,6 +137,7 @@ public class News {
         this.setTitle(title);
         this.setUrl(url);
         this.setContent(content);
+        this.setTrailText(trailText);
         this.setLanguage(language);
         this.setSaved(saved);
         this.setViewed(viewed);

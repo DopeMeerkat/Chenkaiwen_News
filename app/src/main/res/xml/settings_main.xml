@@ -2,17 +2,16 @@
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
     android:title="@string/action_settings">
 
-    <EditTextPreference
+    <ListPreference
         android:defaultValue="false"
-        android:hint="hint"
-        android:inputType="numberDecimal"
-        android:key="key"
-        android:selectAllOnFocus="true"
-        android:title="Title" />
+        android:entries="@array/settings_news_preference"
+        android:entryValues="@array/settings_news_preference"
+        android:key="@string/settings_filter_key"
+        android:title="@string/settings_filter_label" />
     <Preference
         android:defaultValue="2019-01-01"
-        android:key="date"
-        android:title="date title" />
+        android:key="@string/settings_date_key"
+        android:title="@string/settings_date_label" />
 
 
 </PreferenceScreen>

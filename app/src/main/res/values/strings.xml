@@ -11,4 +11,21 @@
     <string name="menu_recommend">Recommended</string>
     <string name="menu_history">View History</string>
 
+    <string name="settings_all_label">All</string>
+    <string name="settings_entertainment_label">娱乐</string>
+    <string name="settings_military_label">军事</string>
+    <string name="settings_education_label">教育</string>
+    <string name="settings_culture_label">文化</string>
+    <string name="settings_health_label">健康</string>
+    <string name="settings_finance_label">财经</string>
+    <string name="settings_sports_label">体育</string>
+    <string name="settings_automobile_label">汽车</string>
+    <string name="settings_technology_label">科技</string>
+    <string name="settings_society_label">社会</string>
+
+    <string name="settings_filter_label">Filter news categories</string>
+    <string name="settings_filter_key">filter</string>
+    <string name="settings_date_label">Set start date</string>
+    <string name="settings_date_key">date</string>
+
 </resources>

@@ -23,12 +23,20 @@ class NewsRepository {
         return mAllNews;
     }
     LiveData<List<News>> getNewsByCategory(String category) {
-        mNewsDao.getNewsByCategory(category);
+        mAllNews = mNewsDao.getNewsByCategory(category);
         return mAllNews;
     }
     LiveData<List<News>> getNewsByViewed(boolean viewed) {
-        mNewsDao.getNewsByViewed(viewed);
+        mAllNews = mNewsDao.getNewsByViewed(viewed);
         return mAllNews;
+    }
+    LiveData<List<News>> getNewsBySaved(boolean saved) {
+        mAllNews = mNewsDao.getNewsBySaved(saved);
+        return mAllNews;
+    }
+
+    void deleteAll(){
+        mNewsDao.deleteAll();
     }
 
     void insert(News News) {
