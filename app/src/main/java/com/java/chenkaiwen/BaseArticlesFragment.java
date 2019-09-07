@@ -1,5 +1,6 @@
 package com.java.chenkaiwen;
 
+import android.app.Application;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.net.ConnectivityManager;
@@ -8,6 +9,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.LiveData;
 import androidx.loader.app.LoaderManager;
 import androidx.loader.content.Loader;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
@@ -25,27 +27,31 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 import com.java.chenkaiwen.News.News;
+import com.java.chenkaiwen.News.NewsDao;
 import com.java.chenkaiwen.News.NewsDatabase;
 import com.java.chenkaiwen.News.NewsListAdapter;
 import com.java.chenkaiwen.News.NewsViewModel;
 
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 
 public class BaseArticlesFragment extends Fragment
 {
     private static final String LOG_TAG = BaseArticlesFragment.class.getName();
-    private NewsListAdapter mAdapter;
+    protected NewsListAdapter mAdapter;
     private TextView mEmptyStateTextView;
     private View mLoadingIndicator;
     private SwipeRefreshLayout mSwipeRefreshLayout;
     private NewsViewModel mNewsViewModel;
     private SharedPreferences sharedPrefs;
+    private List<News> mNews;
 
     private int mode = 0;
     private String size = "60";
-    private String startDate = "2019-01-01";
-    private String endDate = "2019-09-01";
+    private String startDate;
+    private String endDate;
     private String words;
     private String categories;
 
@@ -59,11 +65,15 @@ public class BaseArticlesFragment extends Fragment
     }
     String getStartDate()
     {
-        return startDate;
+        String date = sharedPrefs.getString(getContext().getString(R.string.settings_date_key),
+                getContext().getString(R.string.settings_date_key));
+        return date;
     }
     String getEndDate()
     {
-        return endDate;
+        DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+        LocalDate localDate = LocalDate.now();
+        return dtf.format(localDate);
     }
     String getWords()
     {
@@ -80,22 +90,25 @@ public class BaseArticlesFragment extends Fragment
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        NewsDatabase db = NewsDatabase.getDatabase(getActivity().getApplication());
+
+        mNewsViewModel = ViewModelProviders.of(this).get(NewsViewModel.class);
         View rootView = inflater.inflate(R.layout.fragment_home, container, false);
         sharedPrefs = PreferenceManager.getDefaultSharedPreferences(getContext());
         RecyclerView recyclerView = rootView.findViewById(R.id.recycler_view);
         //final NewsListAdapter adapter = new NewsListAdapter(getActivity());
-        mAdapter = new NewsListAdapter(getActivity());
+        mAdapter = new NewsListAdapter(getActivity(), mNewsViewModel);
         recyclerView.setAdapter(mAdapter);
         LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity());
         recyclerView.setLayoutManager(layoutManager);
-        mNewsViewModel = ViewModelProviders.of(this).get(NewsViewModel.class);
+
         mNewsViewModel.getAllNews(getMode()).observe(this, new Observer<List<News>>() {
             @Override
             public void onChanged(@Nullable final List<News> News) {
                 mAdapter.setNews(News);
             }
         });
-
+        //updateList();
         mSwipeRefreshLayout = rootView.findViewById(R.id.swipe_refresh);
         mSwipeRefreshLayout.setColorSchemeColors(getResources().getColor(R.color.refresh1),
                 getResources().getColor(R.color.refresh2),
@@ -107,7 +120,8 @@ public class BaseArticlesFragment extends Fragment
                 Log.i(LOG_TAG, "onRefresh called from SwipeRefreshLayout");
                 Runnable runnable_update = () -> {
                     try {
-                        //mNewsViewModel.deleteAll();
+                        //mNewsViewModel = new NewsViewModel(getActivity().getApplication());
+                        mNewsViewModel.deleteAll();
                         Log.d("Refresh", "Start refresh");
                         WebService webService = new WebService();
                         if (getSize() != null) { webService.setSize(getSize()); }
@@ -117,7 +131,7 @@ public class BaseArticlesFragment extends Fragment
                         if (getCategories() != null) { webService.setCategories(getCategories()); }
                         String response = webService.connect();
                         List<News> list = webService.makeNewsList(response);
-                        List<News> insertList = new ArrayList<>();
+                        //List<News> insertList = new ArrayList<>();
                         NewsDatabase newsDatabase = NewsDatabase.getDatabase(getContext());
                         for (int i = 0; i < list.size(); i ++) {
                             //Log.d("refresh", "" + i);
@@ -126,12 +140,16 @@ public class BaseArticlesFragment extends Fragment
                                 newsDatabase.newsDao().insertNews(list.get(i));
                             }
                         }
+//                        mNewsViewModel = new NewsViewModel(getActivity().getApplication());
+//                        mNews = mNewsViewModel.getAllNews(getMode());
+
                     } catch (Exception e){
                         Log.d("Refresh", e.toString());
                     }
                 };
                 mSwipeRefreshLayout.setRefreshing(false);
                 new Thread(runnable_update).start();
+                //updateList();
                 Toast.makeText(getActivity(), "Connection Success",
                         Toast.LENGTH_SHORT).show();
             }
@@ -142,6 +160,12 @@ public class BaseArticlesFragment extends Fragment
 
         return rootView;
     }
+
+//    public void updateList(){
+//        mAdapter.setNews(mNews);
+//        mAdapter.changed();
+//        return;
+//    }
 
     private boolean isConnected() {
         ConnectivityManager connectivityManager = (ConnectivityManager)

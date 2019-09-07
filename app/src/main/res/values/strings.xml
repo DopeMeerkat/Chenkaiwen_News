@@ -11,6 +11,8 @@
     <string name="menu_recommend">Recommended</string>
     <string name="menu_history">View History</string>
 
+    <string name="news_open_web">Open in browser</string>
+
     <string name="settings_all_label">All</string>
     <string name="settings_entertainment_label">娱乐</string>
     <string name="settings_military_label">军事</string>

@@ -11,14 +11,19 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.view.MenuItem;
 import android.widget.DatePicker;
 
+import com.java.chenkaiwen.News.Keywords;
+
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.List;
 
 public class SettingsActivity extends AppCompatActivity {
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.settings_activity);
 
@@ -29,7 +34,6 @@ public class SettingsActivity extends AppCompatActivity {
 
     public static class NewsPreferenceFragment extends PreferenceFragment
             implements Preference.OnPreferenceChangeListener, DatePickerDialog.OnDateSetListener {
-
         @Override
         public void onCreate(Bundle savedInstanceState) {
             super.onCreate(savedInstanceState);

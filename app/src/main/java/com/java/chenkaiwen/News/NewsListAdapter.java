@@ -4,11 +4,12 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
-import android.net.Uri;
 import android.preference.PreferenceManager;
+
+import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.cardview.widget.CardView;
-import android.text.Html;
+
 import android.text.format.DateUtils;
 import android.util.Log;
 import android.util.TypedValue;
@@ -29,13 +30,19 @@ import java.util.List;
 import java.util.Locale;
 import java.util.TimeZone;
 import com.bumptech.glide.Glide;
+import com.java.chenkaiwen.ViewNewsActivity;
+import com.java.chenkaiwen.WebService;
 
 public class NewsListAdapter extends RecyclerView.Adapter<NewsListAdapter.ViewHolder> {
+    public static final String EXTRA_MESSAGE = "com.java.chenkaiwen.MESSAGE";
     private Context mContext;
     private SharedPreferences sharedPrefs;
     private List<News> mNews = Collections.emptyList();
-    public NewsListAdapter(Context context) {
+    private NewsViewModel mNewsViewModel;
+
+    public NewsListAdapter(Context context, NewsViewModel newsViewModel) {
         mContext = context;
+        mNewsViewModel = newsViewModel;
     }
 
     @Override
@@ -44,10 +51,6 @@ public class NewsListAdapter extends RecyclerView.Adapter<NewsListAdapter.ViewHo
         return new ViewHolder(v);
     }
 
-//    @Override
-//    public int getItemCount() {
-//        return mNews.size();
-//    }
     public void setNews(List<News> news) {
         mNews = news;
         notifyDataSetChanged();
@@ -55,6 +58,7 @@ public class NewsListAdapter extends RecyclerView.Adapter<NewsListAdapter.ViewHo
     public void changed() {
         notifyDataSetChanged();
     }
+
     @Override
     public int getItemCount() {
         if (mNews != null)
@@ -124,12 +128,30 @@ public class NewsListAdapter extends RecyclerView.Adapter<NewsListAdapter.ViewHo
         holder.cardView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                //Log.d("NewsAdapter", "clicked");
-                mNews.get(position).setViewed(true);
+                Runnable runnable_update = () -> {
+                    try {
+                        News temp = mNews.get(position);
+                        temp.setViewed(true);
+                        mNewsViewModel.update(temp);
+                    } catch (Exception e){
+                        Log.d("Click", e.toString());
+                    }
+                };
+                Thread t = new Thread(runnable_update);
+                t.start();
+
                 notifyDataSetChanged();
-//                Uri newsUri = Uri.parse(currentNews.getUrl());
-//                Intent websiteIntent = new Intent(Intent.ACTION_VIEW, newsUri);
-//                mContext.startActivity(websiteIntent);
+                Intent viewNewsIntent = new Intent(mContext, ViewNewsActivity.class);
+                String[] arr = new String[7];
+                arr[0] = currentNews.getTitle();
+                arr[1] = currentNews.getContent();
+                arr[2] = currentNews.getPublisher();
+                arr[3] = currentNews.getPublishTime();
+                arr[4] = currentNews.getImage();
+                arr[5] = currentNews.getVideo();
+                arr[6] = currentNews.getUrl();
+                viewNewsIntent.putExtra(EXTRA_MESSAGE, arr);
+                mContext.startActivity(viewNewsIntent);
             }
         });
 

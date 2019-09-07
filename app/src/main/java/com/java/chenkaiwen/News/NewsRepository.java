@@ -35,6 +35,8 @@ class NewsRepository {
         return mAllNews;
     }
 
+    void updateNews(News news) { mNewsDao.updateNews(news);}
+
     void deleteAll(){
         mNewsDao.deleteAll();
     }

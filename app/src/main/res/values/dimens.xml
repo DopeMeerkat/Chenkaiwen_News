@@ -17,6 +17,7 @@
     <dimen name="thumbnail_image_height">120dp</dimen>
     <dimen name="share_icon_size">18dp</dimen>
 
+    <dimen name="sp32">32sp</dimen>
     <dimen name="sp22">22sp</dimen>
     <dimen name="sp16">16sp</dimen>
     <dimen name="sp14">14sp</dimen>

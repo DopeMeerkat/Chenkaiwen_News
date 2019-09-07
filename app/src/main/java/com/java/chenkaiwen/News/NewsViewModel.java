@@ -71,9 +71,11 @@ public class NewsViewModel extends AndroidViewModel {
         }
         return mAllNews;
     }
+
     public void deleteAll() {
         mRepository.deleteAll();
     }
+    public void update(News news) { mRepository.updateNews(news);}
     public void insert(News news) {
         mRepository.insert(news);
     }
