@@ -48,7 +48,7 @@ public class BaseArticlesFragment extends Fragment
     private SharedPreferences sharedPrefs;
     private List<News> mNews;
 
-    private int mode = 0;
+    private int mode = 1;
     private String size = "60";
     private String startDate;
     private String endDate;
@@ -79,6 +79,7 @@ public class BaseArticlesFragment extends Fragment
     {
         return words;
     }
+
     String getCategories()
     {
         String category = sharedPrefs.getString(getContext().getString(R.string.settings_filter_key),
@@ -102,7 +103,7 @@ public class BaseArticlesFragment extends Fragment
         LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity());
         recyclerView.setLayoutManager(layoutManager);
 
-        mNewsViewModel.getAllNews(getMode()).observe(this, new Observer<List<News>>() {
+        mNewsViewModel.getAllNews(getMode(), getCategories(), getWords()).observe(this, new Observer<List<News>>() {
             @Override
             public void onChanged(@Nullable final List<News> News) {
                 mAdapter.setNews(News);
@@ -120,8 +121,7 @@ public class BaseArticlesFragment extends Fragment
                 Log.i(LOG_TAG, "onRefresh called from SwipeRefreshLayout");
                 Runnable runnable_update = () -> {
                     try {
-                        //mNewsViewModel = new NewsViewModel(getActivity().getApplication());
-                        mNewsViewModel.deleteAll();
+                        if (getMode() == 3){ mNewsViewModel.deleteAll();}
                         Log.d("Refresh", "Start refresh");
                         WebService webService = new WebService();
                         if (getSize() != null) { webService.setSize(getSize()); }

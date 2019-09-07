@@ -18,6 +18,9 @@ public interface NewsDao {
     @Query("SELECT * FROM News WHERE category = :category")
     LiveData<List<News>> getNewsByCategory(String category);
 
+//    @Query("SELECT * FROM News WHERE keywords ") //where keywords contain keywords
+//    LiveData<List<News>> getNewsByKeywords(String keyword);
+
     @Query("SELECT * FROM News WHERE viewed = :viewed")
     LiveData<List<News>> getNewsByViewed(boolean viewed);
 

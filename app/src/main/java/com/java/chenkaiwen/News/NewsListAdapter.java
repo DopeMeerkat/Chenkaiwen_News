@@ -30,8 +30,8 @@ import java.util.List;
 import java.util.Locale;
 import java.util.TimeZone;
 import com.bumptech.glide.Glide;
+import com.java.chenkaiwen.Recommended;
 import com.java.chenkaiwen.ViewNewsActivity;
-import com.java.chenkaiwen.WebService;
 
 public class NewsListAdapter extends RecyclerView.Adapter<NewsListAdapter.ViewHolder> {
     public static final String EXTRA_MESSAGE = "com.java.chenkaiwen.MESSAGE";
@@ -139,8 +139,9 @@ public class NewsListAdapter extends RecyclerView.Adapter<NewsListAdapter.ViewHo
                 };
                 Thread t = new Thread(runnable_update);
                 t.start();
-
                 notifyDataSetChanged();
+                Recommended.getInstance().insertKeys(currentNews.getKeywords());
+
                 Intent viewNewsIntent = new Intent(mContext, ViewNewsActivity.class);
                 String[] arr = new String[7];
                 arr[0] = currentNews.getTitle();
@@ -160,11 +161,6 @@ public class NewsListAdapter extends RecyclerView.Adapter<NewsListAdapter.ViewHo
         } else {
             //Log.d("Adapter", currentNews.getNewsID() + " has image");
             holder.thumbnailImageView.setVisibility(View.VISIBLE);
-//            Picasso.get()
-//                    .load(currentNews.getImage())
-//                    .resize((int)mContext.getResources().getDimension(R.dimen.thumbnail_image_width), (int)mContext.getResources().getDimension(R.dimen.thumbnail_image_width))
-//                    .centerCrop()
-//                    .into(holder.thumbnailImageView);
             Glide.with(mContext.getApplicationContext())
                     .load(currentNews.getImage())
                     .override((int)mContext.getResources().getDimension(R.dimen.thumbnail_image_width), (int)mContext.getResources().getDimension(R.dimen.thumbnail_image_width))
@@ -263,6 +259,13 @@ public class NewsListAdapter extends RecyclerView.Adapter<NewsListAdapter.ViewHo
 //                news.getTitle() + " : " + news.getUrl());
 //        mContext.startActivity(Intent.createChooser(sharingIntent,
 //                mContext.getString(R.string.share_article)));
+        Intent sendIntent = new Intent();
+        sendIntent.setAction(Intent.ACTION_SEND);
+        sendIntent.putExtra(Intent.EXTRA_TEXT, news.getUrl());
+        sendIntent.setType("text/plain");
+
+        Intent shareIntent = Intent.createChooser(sendIntent, null);
+        mContext.startActivity(shareIntent);
     }
 
 //    public void clearAll() {

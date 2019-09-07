@@ -6,7 +6,7 @@ public class HistoryFragment extends BaseArticlesFragment {
 
     @Override
     int getMode() {
-        return 11;
+        return 2;
     }
 
 }
