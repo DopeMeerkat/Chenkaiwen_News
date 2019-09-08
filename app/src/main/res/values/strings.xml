@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Chenkaiwen_news</string>
+    <string name="app_name">News</string>
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
     <string name="nav_header_title">Android Studio</string>
@@ -9,8 +9,8 @@
 
     <string name="menu_home">Home</string>
     <string name="menu_recommend">Recommended</string>
-    <string name="menu_history">View History</string>
-
+    <string name="menu_history">View history</string>
+    <string name="menu_favorites">Favorites</string>
     <string name="news_open_web">Open in browser</string>
 
     <string name="settings_all_label">All</string>
@@ -29,5 +29,9 @@
     <string name="settings_filter_key">filter</string>
     <string name="settings_date_label">Set start date</string>
     <string name="settings_date_key">date</string>
+    <string name="settings_clear_history">Clear history</string>
+    <string name="settings_clear_recommendations">Clear recommendations</string>
+    <string name="settings_history_key">history</string>
+    <string name="settings_recommend_key">recommend</string>
 
 </resources>

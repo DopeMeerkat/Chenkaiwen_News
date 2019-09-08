@@ -8,10 +8,15 @@ import android.preference.Preference;
 import android.preference.PreferenceFragment;
 import android.preference.PreferenceManager;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.lifecycle.ViewModelProviders;
+
+import android.util.Log;
 import android.view.MenuItem;
 import android.widget.DatePicker;
 
 import com.java.chenkaiwen.News.Keywords;
+import com.java.chenkaiwen.News.News;
+import com.java.chenkaiwen.News.NewsDatabase;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -27,7 +32,6 @@ public class SettingsActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.settings_activity);
 
-        // Navigate with the app icon in the action bar
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
     }
@@ -46,6 +50,12 @@ public class SettingsActivity extends AppCompatActivity {
             Preference fromDate = findPreference(getString(R.string.settings_date_key));
             setOnPreferenceClick(fromDate);
             bindPreferenceSummaryToValue(fromDate);
+
+            Preference clearHistory = findPreference(getString(R.string.settings_history_key));
+            setOnPreferenceClick(clearHistory);
+
+            Preference clearRecommend = findPreference(getString(R.string.settings_recommend_key));
+            setOnPreferenceClick(clearRecommend);
         }
 
         private void setOnPreferenceClick(Preference preference) {
@@ -53,8 +63,24 @@ public class SettingsActivity extends AppCompatActivity {
                 @Override
                 public boolean onPreferenceClick(Preference preference) {
                     String key = preference.getKey();
-                    if (key.equalsIgnoreCase("date")) {
+                    Log.d("Preference Clicked", key);
+                    if (key.equalsIgnoreCase(getString(R.string.settings_date_key))) {
                         showDatePicker();
+                    }
+                    else if (key.equalsIgnoreCase(getString(R.string.settings_history_key))) {
+                        Runnable runnable_update = () -> {
+                            try {
+                                NewsDatabase newsDatabase = NewsDatabase.getDatabase(getContext());
+                                newsDatabase.newsDao().deleteAll();
+                                Log.d("Clear History", "cleared");
+                            } catch (Exception e){
+                                Log.d("Clear History", e.toString());
+                            }
+                        };
+                        new Thread(runnable_update).start();
+                    }
+                    else if (key.equalsIgnoreCase(getString(R.string.settings_recommend_key))) {
+                        Recommended.getInstance().clear();
                     }
                     return false;
                 }

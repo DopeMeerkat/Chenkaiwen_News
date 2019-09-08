@@ -23,6 +23,8 @@ public class CategoryFragmentPagerAdapter extends FragmentPagerAdapter {
                 return new RecommendFragment();
             case 2:
                 return new HistoryFragment();
+            case 3:
+                return new FavoritesFragment();
             default:
                 return null;
         }
@@ -30,7 +32,7 @@ public class CategoryFragmentPagerAdapter extends FragmentPagerAdapter {
 
     @Override
     public int getCount() {
-        return 3;
+        return 4;
     }
 
     @Override
@@ -46,6 +48,9 @@ public class CategoryFragmentPagerAdapter extends FragmentPagerAdapter {
 //            case 2:
 //                titleResId = R.string.menu_history;
 //                break;
+            case 3:
+                titleResId = R.string.menu_favorites;
+                break;
             default:
                 titleResId = R.string.menu_history;
                 break;

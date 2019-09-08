@@ -147,6 +147,7 @@ public class WebService {
                 trailText = trailText + content.charAt(i);
             }
         }
+        trailText.replaceAll("\\s+","");
         trailText = trailText + "...";
 //        Log.d("MakeNews", trailText);
         JSONArray jsonKeywords = jsonObject.getJSONArray("keywords");

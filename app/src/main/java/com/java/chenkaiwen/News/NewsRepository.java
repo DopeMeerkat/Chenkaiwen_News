@@ -23,6 +23,7 @@ class NewsRepository {
         return mAllNews;
     }
     LiveData<List<News>> getNewsByCategory(String category) {
+        if(category == null) return getAllNews();
         mAllNews = mNewsDao.getNewsByCategory(category);
         return mAllNews;
     }
@@ -39,6 +40,10 @@ class NewsRepository {
 
     void deleteAll(){
         mNewsDao.deleteAll();
+    }
+
+    void deleteAllUnsaved(){
+        mNewsDao.deleteAllUnsaved(true);
     }
 
     void insert(News News) {

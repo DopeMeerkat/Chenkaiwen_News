@@ -20,7 +20,7 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.VideoView;
-
+import android.R.drawable;
 import com.java.chenkaiwen.R;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -74,6 +74,7 @@ public class NewsListAdapter extends RecyclerView.Adapter<NewsListAdapter.ViewHo
         private ImageView thumbnailImageView;
         private VideoView videoView;
         private Button shareButton;
+        private Button favoriteButton;
         private CardView cardView;
 
         ViewHolder(View itemView) {
@@ -85,6 +86,7 @@ public class NewsListAdapter extends RecyclerView.Adapter<NewsListAdapter.ViewHo
             thumbnailImageView = itemView.findViewById(R.id.card_image);
             videoView = itemView.findViewById(R.id.card_video);
             shareButton = itemView.findViewById(R.id.card_share);
+            favoriteButton = itemView.findViewById(R.id.card_favorite);
             cardView = itemView.findViewById(R.id.card_view);
         }
     }
@@ -93,9 +95,7 @@ public class NewsListAdapter extends RecyclerView.Adapter<NewsListAdapter.ViewHo
     public void onBindViewHolder(ViewHolder holder, int position) {
         sharedPrefs = PreferenceManager.getDefaultSharedPreferences(mContext);
 
-//        setColorTheme(holder);
-//
-//        setTextSize(holder);
+        //holder.cardView.setBackgroundResource(R.color.colorPrimaryLight);
 
         final News currentNews = mNews.get(position);
         holder.titleTextView.setTextSize(TypedValue.COMPLEX_UNIT_PX,
@@ -124,7 +124,6 @@ public class NewsListAdapter extends RecyclerView.Adapter<NewsListAdapter.ViewHo
         //holder.dateTextView.setText(getTimeDifference(formatDate(currentNews.getPublishTime())));
         holder.dateTextView.setText(currentNews.getPublishTime());
 
-
         holder.cardView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -134,7 +133,7 @@ public class NewsListAdapter extends RecyclerView.Adapter<NewsListAdapter.ViewHo
                         temp.setViewed(true);
                         mNewsViewModel.update(temp);
                     } catch (Exception e){
-                        Log.d("Click", e.toString());
+                        Log.d("Card Click", e.toString());
                     }
                 };
                 Thread t = new Thread(runnable_update);
@@ -155,29 +154,49 @@ public class NewsListAdapter extends RecyclerView.Adapter<NewsListAdapter.ViewHo
                 mContext.startActivity(viewNewsIntent);
             }
         });
-
-        if (currentNews.getImage().equals("")) {
-            holder.thumbnailImageView.setVisibility(View.GONE);
+        if (!currentNews.getVideo().equals("") && currentNews.getImage().equals("")) {
+            holder.videoView.setVisibility(View.VISIBLE);
         } else {
+            holder.videoView.setVisibility(View.GONE);
+            //TODO
+        }
+        if (!currentNews.getImage().equals("")) {
             //Log.d("Adapter", currentNews.getNewsID() + " has image");
             holder.thumbnailImageView.setVisibility(View.VISIBLE);
             Glide.with(mContext.getApplicationContext())
                     .load(currentNews.getImage())
                     .override((int)mContext.getResources().getDimension(R.dimen.thumbnail_image_width), (int)mContext.getResources().getDimension(R.dimen.thumbnail_image_width))
                     .into(holder.thumbnailImageView);
-        }
-        if (currentNews.getImage().equals("") && !currentNews.getVideo().equals("")) {
-            holder.videoView.setVisibility(View.VISIBLE);
         } else {
-            holder.videoView.setVisibility(View.GONE);
-            //TODO
+            holder.thumbnailImageView.setVisibility(View.GONE);
         }
+
 
 
         holder.shareButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 shareData(currentNews);
+            }
+        });
+        if(currentNews.isSaved()) holder.favoriteButton.setBackgroundResource(drawable.btn_star_big_on);
+        else holder.favoriteButton.setBackgroundResource(drawable.btn_star_big_off);
+        holder.favoriteButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Runnable runnable_update = () -> {
+                    try {
+                        News temp = mNews.get(position);
+                        if(temp.isSaved()) temp.setSaved(false);
+                        else temp.setSaved(true);
+                        mNewsViewModel.update(temp);
+                    } catch (Exception e){
+                        Log.d("Favorite Click", e.toString());
+                    }
+                };
+                Thread t = new Thread(runnable_update);
+                t.start();
+                notifyDataSetChanged();
             }
         });
     }

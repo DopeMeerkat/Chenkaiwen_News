@@ -23,13 +23,17 @@ public class NewsViewModel extends AndroidViewModel {
         {
             case 1:{ //category:
                 mAllNews = mRepository.getNewsByCategory(category);
+
                 break;
             }
             case 2:{ //history
                 mAllNews = mRepository.getNewsByViewed(true);
                 break;
             }
-
+            case 4:{ //favorites
+                mAllNews = mRepository.getNewsBySaved(true);
+                break;
+            }
             default: //home
                 mAllNews = mRepository.getAllNews();
         }
@@ -39,6 +43,7 @@ public class NewsViewModel extends AndroidViewModel {
     public void deleteAll() {
         mRepository.deleteAll();
     }
+    public void deleteAllUnsaved() {mRepository.deleteAllUnsaved();}
     public void update(News news) { mRepository.updateNews(news);}
     public void insert(News news) {
         mRepository.insert(news);

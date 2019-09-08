@@ -24,7 +24,7 @@ public interface NewsDao {
     @Query("SELECT * FROM News WHERE viewed = :viewed")
     LiveData<List<News>> getNewsByViewed(boolean viewed);
 
-    @Query("SELECT * FROM News WHERE viewed = :saved")
+    @Query("SELECT * FROM News WHERE saved = :saved")
     LiveData<List<News>> getNewsBySaved(boolean saved);
 
     @Query("SELECT * FROM News WHERE newsID = :newsID")
@@ -38,6 +38,9 @@ public interface NewsDao {
 
     @Update
     public void updateNews(News news);
+
+    @Query("DELETE FROM News WHERE NOT saved = :saved AND NOT viewed = :saved")
+    void deleteAllUnsaved(boolean saved);
 
     @Query("DELETE FROM News")
     void deleteAll();

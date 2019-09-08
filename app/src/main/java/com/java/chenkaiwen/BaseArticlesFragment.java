@@ -57,7 +57,8 @@ public class BaseArticlesFragment extends Fragment
 
     int getMode()
     {
-        if(mode == 1 && getCategories() == null) return 0;
+//        if(getCategories() == null) return 0;
+//        return 1;
         return mode;
     }
     String getSize()
@@ -122,7 +123,8 @@ public class BaseArticlesFragment extends Fragment
                 Log.i(LOG_TAG, "onRefresh called from SwipeRefreshLayout");
                 Runnable runnable_update = () -> {
                     try {
-                        if (getMode() == 3){ mNewsViewModel.deleteAll();}
+//                        if (getMode() != 3 && getMode() != 2){ mNewsViewModel.deleteAll();}
+                        mNewsViewModel.deleteAllUnsaved();
                         Log.d("Refresh", "Start refresh");
                         WebService webService = new WebService();
                         if (getSize() != null) { webService.setSize(getSize()); }
@@ -143,16 +145,18 @@ public class BaseArticlesFragment extends Fragment
                         }
 //                        mNewsViewModel = new NewsViewModel(getActivity().getApplication());
 //                        mNews = mNewsViewModel.getAllNews(getMode());
-
+                        Log.d("Refresh", "done");
                     } catch (Exception e){
                         Log.d("Refresh", e.toString());
                     }
                 };
                 mSwipeRefreshLayout.setRefreshing(false);
-                new Thread(runnable_update).start();
-                //updateList();
-                Toast.makeText(getActivity(), "Connection Success",
-                        Toast.LENGTH_SHORT).show();
+                if (getMode() != 3 && getMode() != 2){
+                    new Thread(runnable_update).start();
+                    Toast.makeText(getActivity(), "Connection Success",
+                            Toast.LENGTH_SHORT).show();
+                }
+
             }
         });
 

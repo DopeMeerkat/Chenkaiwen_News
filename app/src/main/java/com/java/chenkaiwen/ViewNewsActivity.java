@@ -2,6 +2,7 @@ package com.java.chenkaiwen;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
 import android.util.TypedValue;
@@ -54,6 +55,12 @@ public class ViewNewsActivity extends AppCompatActivity {
         newsDateTextView.setText(arr[3]);
         //getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
+        if (arr[4].equals("") && !arr[5].equals("")) {
+            newsVideoView.setVisibility(View.VISIBLE);
+        } else {
+            newsVideoView.setVisibility(View.GONE);
+            //TODO
+        }
         if (arr[4].equals("")) {
             newsImageView.setVisibility(View.GONE);
         } else {
@@ -64,12 +71,12 @@ public class ViewNewsActivity extends AppCompatActivity {
 //                            (int)getResources().getDimension(R.dimen.thumbnail_image_width))
                     .into(newsImageView);
         }
-        if (arr[4].equals("") && !arr[5].equals("")) {
-            newsVideoView.setVisibility(View.VISIBLE);
-        } else {
-            newsVideoView.setVisibility(View.GONE);
-            //TODO
-        }
+        newsTitleTextView.setTextSize(TypedValue.COMPLEX_UNIT_PX,
+                getResources().getDimension(R.dimen.sp32));
+        newsTitleTextView.setTextColor(Color.BLACK);
+        newsArticleTextView.setTextSize(TypedValue.COMPLEX_UNIT_PX,
+                getResources().getDimension(R.dimen.sp22));
+
         url = arr[6];
         newsOpenButton.setOnClickListener(new View.OnClickListener() {
             @Override
