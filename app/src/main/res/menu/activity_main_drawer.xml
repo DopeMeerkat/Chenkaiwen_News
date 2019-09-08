@@ -20,6 +20,10 @@
             android:id="@+id/nav_favorites"
             android:icon="@color/refresh4"
             android:title="@string/menu_favorites" />
+        <item
+            android:id="@+id/nav_search"
+            android:icon="@color/refresh4"
+            android:title="@string/menu_search" />
 
     </group>
 

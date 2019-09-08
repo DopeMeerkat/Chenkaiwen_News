@@ -70,6 +70,8 @@ public class MainActivity extends AppCompatActivity
             viewPager.setCurrentItem(2);
         } else if (id == R.id.nav_favorites) {
             viewPager.setCurrentItem(3);
+        } else if (id == R.id.nav_search) {
+            viewPager.setCurrentItem(4);
         }
 
         DrawerLayout drawer = findViewById(R.id.drawer_layout);

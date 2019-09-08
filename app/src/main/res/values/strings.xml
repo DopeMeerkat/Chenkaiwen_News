@@ -11,6 +11,7 @@
     <string name="menu_recommend">Recommended</string>
     <string name="menu_history">View history</string>
     <string name="menu_favorites">Favorites</string>
+    <string name="menu_search">Search</string>
     <string name="news_open_web">Open in browser</string>
 
     <string name="settings_all_label">All</string>
@@ -35,5 +36,7 @@
     <string name="settings_recommend_key">recommend</string>
     <string name="settings_dark_key">dark</string>
     <string name="settings_dark_title">Enable dark mode</string>
+    <string name="settings_search_key">search</string>
+    <string name="settings_search_title">Search by keyword</string>
 
 </resources>

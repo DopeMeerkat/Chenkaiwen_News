@@ -43,8 +43,8 @@ public class SettingsActivity extends AppCompatActivity {
             super.onCreate(savedInstanceState);
             addPreferencesFromResource(R.xml.settings_main);
 
-            Preference numOfItems = findPreference(getString(R.string.settings_filter_key));
-            bindPreferenceSummaryToValue(numOfItems);
+            Preference searchWord = findPreference(getString(R.string.settings_search_key));
+            bindPreferenceSummaryToValue(searchWord);
 
             Preference fromDate = findPreference(getString(R.string.settings_date_key));
             setOnPreferenceClick(fromDate);

@@ -151,7 +151,7 @@ public class BaseArticlesFragment extends Fragment
                     }
                 };
                 mSwipeRefreshLayout.setRefreshing(false);
-                if (getMode() != 3 && getMode() != 2){
+                if (getMode() != 4 && getMode() != 2){
                     new Thread(runnable_update).start();
                     Toast.makeText(getActivity(), "Connection Success",
                             Toast.LENGTH_SHORT).show();

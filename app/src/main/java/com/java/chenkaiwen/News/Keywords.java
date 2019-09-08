@@ -8,7 +8,7 @@ public class Keywords {
     public String word;
 
     public Keywords(JSONObject o) throws JSONException {
-        this.score = o.getInt("score");
+        this.score = o.getDouble("score");
         this.word = o.getString("word");
     }
 }
