@@ -6,6 +6,8 @@
 
 `target SDK version >= 28`
 
+Note: You need to change the starting date before it will display the news
+
 ## Features
 
 - Filter news by date, categories, and keywords
