@@ -105,13 +105,8 @@ public class BaseArticlesFragment extends Fragment
         LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity());
         recyclerView.setLayoutManager(layoutManager);
 
-        mNewsViewModel.getAllNews(getMode(), getCategories(), getWords()).observe(this, new Observer<List<News>>() {
-            @Override
-            public void onChanged(@Nullable final List<News> News) {
-                mAdapter.setNews(News);
-            }
-        });
-        //updateList();
+
+        updateList();
         mSwipeRefreshLayout = rootView.findViewById(R.id.swipe_refresh);
         mSwipeRefreshLayout.setColorSchemeColors(getResources().getColor(R.color.refresh1),
                 getResources().getColor(R.color.refresh2),
@@ -145,12 +140,14 @@ public class BaseArticlesFragment extends Fragment
                         }
 //                        mNewsViewModel = new NewsViewModel(getActivity().getApplication());
 //                        mNews = mNewsViewModel.getAllNews(getMode());
+
                         Log.d("Refresh", "done");
                     } catch (Exception e){
                         Log.d("Refresh", e.toString());
                     }
                 };
                 mSwipeRefreshLayout.setRefreshing(false);
+                updateList();
                 if (getMode() != 4 && getMode() != 2){
                     new Thread(runnable_update).start();
                     Toast.makeText(getActivity(), "Connection Success",
@@ -166,11 +163,15 @@ public class BaseArticlesFragment extends Fragment
         return rootView;
     }
 
-//    public void updateList(){
-//        mAdapter.setNews(mNews);
-//        mAdapter.changed();
-//        return;
-//    }
+    public void updateList(){
+        mNewsViewModel.getAllNews(getMode(), getCategories(), getWords()).observe(this, new Observer<List<News>>() {
+            @Override
+            public void onChanged(@Nullable final List<News> News) {
+                mAdapter.setNews(News);
+            }
+        });
+        return;
+    }
 
     private boolean isConnected() {
         ConnectivityManager connectivityManager = (ConnectivityManager)

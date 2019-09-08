@@ -46,6 +46,9 @@ public class SettingsActivity extends AppCompatActivity {
             Preference searchWord = findPreference(getString(R.string.settings_search_key));
             bindPreferenceSummaryToValue(searchWord);
 
+            Preference omitWord = findPreference(getString(R.string.settings_omit_key));
+            bindPreferenceSummaryToValue(omitWord);
+
             Preference fromDate = findPreference(getString(R.string.settings_date_key));
             setOnPreferenceClick(fromDate);
             bindPreferenceSummaryToValue(fromDate);

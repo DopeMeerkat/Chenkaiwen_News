@@ -27,6 +27,12 @@ public interface NewsDao {
     @Query("SELECT * FROM News WHERE saved = :saved")
     LiveData<List<News>> getNewsBySaved(boolean saved);
 
+    @Query("SELECT * FROM News WHERE keywords LIKE :keyword")
+    LiveData<List<News>> getNewsByKeyword(String keyword);
+
+    @Query("SELECT * FROM News WHERE NOT keywords LIKE :notWord")
+    LiveData<List<News>> getNewsByNotKeyword(String notWord);
+
     @Query("SELECT * FROM News WHERE newsID = :newsID")
     public News getNewsByNewsID(String newsID);
 

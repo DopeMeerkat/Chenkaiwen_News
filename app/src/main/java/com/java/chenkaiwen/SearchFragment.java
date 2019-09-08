@@ -16,6 +16,6 @@ public class SearchFragment extends BaseArticlesFragment {
 
     @Override
     int getMode() {
-        return 3;
+        return 5;
     }
 }

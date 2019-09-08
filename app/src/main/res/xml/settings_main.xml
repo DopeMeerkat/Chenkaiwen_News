@@ -8,6 +8,12 @@
         android:selectAllOnFocus="true"
         android:singleLine="true"
         android:title="@string/settings_search_title" />
+    <EditTextPreference
+        android:defaultValue=" "
+        android:key="@string/settings_omit_key"
+        android:selectAllOnFocus="true"
+        android:singleLine="true"
+        android:title="@string/settings_omit_title" />
     <SwitchPreference
         android:defaultValue="false"
         android:key="@string/settings_dark_key"

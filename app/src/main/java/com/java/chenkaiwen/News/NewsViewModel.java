@@ -1,6 +1,12 @@
 package com.java.chenkaiwen.News;
 
 import android.app.Application;
+import android.content.SharedPreferences;
+import android.preference.PreferenceManager;
+import android.util.Log;
+
+import com.java.chenkaiwen.R;
+
 import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.LiveData;
 
@@ -32,6 +38,18 @@ public class NewsViewModel extends AndroidViewModel {
             }
             case 4:{ //favorites
                 mAllNews = mRepository.getNewsBySaved(true);
+                break;
+            }
+            case 5: { //search
+                String keyword = "%" + word + "%";
+                mAllNews = mRepository.getAllNews();
+                SharedPreferences sharedPrefs = PreferenceManager.getDefaultSharedPreferences(getApplication().getBaseContext());
+                String notWord = sharedPrefs.getString(getApplication().getBaseContext().getString(R.string.settings_omit_key), " ");
+                Log.d("ViewModel", notWord);
+                if(!notWord.equals(" ")) {
+                    notWord = "%" + notWord + "%";
+                    mAllNews = mRepository.getNewsByNotKeyword(notWord);
+                }
                 break;
             }
             default: //home

@@ -35,6 +35,14 @@ class NewsRepository {
         mAllNews = mNewsDao.getNewsBySaved(saved);
         return mAllNews;
     }
+    LiveData<List<News>> getNewsByKeyword(String keyword) {
+        mAllNews = mNewsDao.getNewsByKeyword(keyword);
+        return mAllNews;
+    }
+    LiveData<List<News>> getNewsByNotKeyword(String notWord) {
+        mAllNews = mNewsDao.getNewsByNotKeyword(notWord);
+        return mAllNews;
+    }
 
     void updateNews(News news) { mNewsDao.updateNews(news);}
 
