@@ -43,7 +43,6 @@ public class SettingsActivity extends AppCompatActivity {
             super.onCreate(savedInstanceState);
             addPreferencesFromResource(R.xml.settings_main);
 
-
             Preference numOfItems = findPreference(getString(R.string.settings_filter_key));
             bindPreferenceSummaryToValue(numOfItems);
 
@@ -56,6 +55,9 @@ public class SettingsActivity extends AppCompatActivity {
 
             Preference clearRecommend = findPreference(getString(R.string.settings_recommend_key));
             setOnPreferenceClick(clearRecommend);
+
+            //Preference darkMode = findPreference(getString(R.string.settings_dark_key));
+            //bindPreferenceSummaryToValue(darkMode);
         }
 
         private void setOnPreferenceClick(Preference preference) {

@@ -33,5 +33,7 @@
     <string name="settings_clear_recommendations">Clear recommendations</string>
     <string name="settings_history_key">history</string>
     <string name="settings_recommend_key">recommend</string>
+    <string name="settings_dark_key">dark</string>
+    <string name="settings_dark_title">Enable dark mode</string>
 
 </resources>

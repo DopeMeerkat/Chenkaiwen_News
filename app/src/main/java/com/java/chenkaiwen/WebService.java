@@ -126,6 +126,7 @@ public class WebService {
         final String url = jsonObject.getString("url");
         final String content = jsonObject.getString("content");
         final String language = jsonObject.getString("language");
+        final String publisher = jsonObject.getString("publisher");
         int close = imgtxt.indexOf(",");
         if (close == -1){ close = imgtxt.indexOf("]");}
 //        String image = "[";
@@ -160,7 +161,7 @@ public class WebService {
         }
         News news = new News(
                 newsID, publishTime, image, category, video,
-                title, url, content, trailText, language,false,false, keywords);
+                title, url, content, trailText, language, publisher,false,false, keywords);
         //Log.d("News", newsID);
         return news;
     }

@@ -125,6 +125,7 @@ public class News {
             String content,
             String trailText,
             String language,
+            String publisher,
             boolean saved,
             boolean viewed,
             List<Keywords> keywords
@@ -139,6 +140,7 @@ public class News {
         this.setContent(content);
         this.setTrailText(trailText);
         this.setLanguage(language);
+        this.setPublisher(publisher);
         this.setSaved(saved);
         this.setViewed(viewed);
         this.setKeywords(keywords);

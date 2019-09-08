@@ -18,6 +18,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.VideoView;
 import android.R.drawable;
@@ -75,6 +76,7 @@ public class NewsListAdapter extends RecyclerView.Adapter<NewsListAdapter.ViewHo
         private VideoView videoView;
         private Button shareButton;
         private Button favoriteButton;
+        private RelativeLayout bodyLayout;
         private CardView cardView;
 
         ViewHolder(View itemView) {
@@ -87,6 +89,7 @@ public class NewsListAdapter extends RecyclerView.Adapter<NewsListAdapter.ViewHo
             videoView = itemView.findViewById(R.id.card_video);
             shareButton = itemView.findViewById(R.id.card_share);
             favoriteButton = itemView.findViewById(R.id.card_favorite);
+            bodyLayout = itemView.findViewById(R.id.card_body_layout);
             cardView = itemView.findViewById(R.id.card_view);
         }
     }
@@ -95,9 +98,8 @@ public class NewsListAdapter extends RecyclerView.Adapter<NewsListAdapter.ViewHo
     public void onBindViewHolder(ViewHolder holder, int position) {
         sharedPrefs = PreferenceManager.getDefaultSharedPreferences(mContext);
 
-        //holder.cardView.setBackgroundResource(R.color.colorPrimaryLight);
-
         final News currentNews = mNews.get(position);
+        setColorTheme(holder, currentNews);
         holder.titleTextView.setTextSize(TypedValue.COMPLEX_UNIT_PX,
                 mContext.getResources().getDimension(R.dimen.sp22));
         holder.authorTextView.setTextSize(TypedValue.COMPLEX_UNIT_PX,
@@ -110,17 +112,9 @@ public class NewsListAdapter extends RecyclerView.Adapter<NewsListAdapter.ViewHo
         holder.titleTextView.setText(currentNews.getTitle());
         holder.articleTextView.setText(currentNews.getTrailText());
         //holder.articleTextView.setVisibility(View.VISIBLE);
-        if (currentNews.getPublisher() == null) {
-            holder.authorTextView.setVisibility(View.GONE);
-        } else {
-            holder.authorTextView.setVisibility(View.VISIBLE);
-            holder.authorTextView.setText(currentNews.getPublisher());
-        }
-        if(currentNews.isViewed()) {
-            holder.titleTextView.setTextColor(Color.GRAY);
-        } else {
-            holder.titleTextView.setTextColor(Color.BLACK);
-        }
+//        Log.d("NewsList", "Author = " + currentNews.getPublisher());
+        holder.authorTextView.setVisibility(View.VISIBLE);
+        holder.authorTextView.setText(currentNews.getPublisher());
         //holder.dateTextView.setText(getTimeDifference(formatDate(currentNews.getPublishTime())));
         holder.dateTextView.setText(currentNews.getPublishTime());
 
@@ -158,7 +152,8 @@ public class NewsListAdapter extends RecyclerView.Adapter<NewsListAdapter.ViewHo
             holder.videoView.setVisibility(View.VISIBLE);
         } else {
             holder.videoView.setVisibility(View.GONE);
-            //TODO
+            holder.videoView.setVideoPath(currentNews.getVideo());
+            holder.videoView.start();
         }
         if (!currentNews.getImage().equals("")) {
             //Log.d("Adapter", currentNews.getNewsID() + " has image");
@@ -201,33 +196,31 @@ public class NewsListAdapter extends RecyclerView.Adapter<NewsListAdapter.ViewHo
         });
     }
 
-//    private void setColorTheme(ViewHolder holder) {
-//        // Get the color theme string from SharedPreferences and check for the value associated with the key
-//        String colorTheme = sharedPrefs.getString(
-//                mContext.getString(R.string.settings_color_key),
-//                mContext.getString(R.string.settings_color_default));
-//
-//        // Change the background color of titleTextView by using the user's stored preferences
-//        if (colorTheme.equals(mContext.getString(R.string.settings_color_white_value))) {
-//            holder.titleTextView.setBackgroundResource(R.color.white);
-//            holder.titleTextView.setTextColor(Color.BLACK);
-//        }else if (colorTheme.equals(mContext.getString(R.string.settings_color_sky_blue_value))) {
-//            holder.titleTextView.setBackgroundResource(R.color.nav_bar_start);
-//            holder.titleTextView.setTextColor(Color.WHITE);
-//        } else if (colorTheme.equals(mContext.getString(R.string.settings_color_dark_blue_value))) {
-//            holder.titleTextView.setBackgroundResource(R.color.color_app_bar_text);
-//            holder.titleTextView.setTextColor(Color.WHITE);
-//        } else if (colorTheme.equals(mContext.getString(R.string.settings_color_violet_value))) {
-//            holder.titleTextView.setBackgroundResource(R.color.violet);
-//            holder.titleTextView.setTextColor(Color.WHITE);
-//        } else if (colorTheme.equals(mContext.getString(R.string.settings_color_light_green_value))) {
-//            holder.titleTextView.setBackgroundResource(R.color.light_green);
-//            holder.titleTextView.setTextColor(Color.WHITE);
-//        } else if (colorTheme.equals(mContext.getString(R.string.settings_color_green_value))) {
-//            holder.titleTextView.setBackgroundResource(R.color.color_section);
-//            holder.titleTextView.setTextColor(Color.WHITE);
-//        }
-//    }
+    private void setColorTheme(ViewHolder holder, News currentNews) {
+        if (sharedPrefs.getBoolean(mContext.getString(R.string.settings_dark_key), false)) {
+            holder.cardView.setCardBackgroundColor(Color.DKGRAY);
+            holder.articleTextView.setTextColor(Color.LTGRAY);
+            holder.authorTextView.setTextColor(Color.LTGRAY);
+            holder.dateTextView.setTextColor(Color.GRAY);
+            holder.bodyLayout.setBackgroundResource(R.color.colorPrimary);
+            if(currentNews.isViewed()) {
+                holder.titleTextView.setTextColor(Color.GRAY);
+            } else {
+                holder.titleTextView.setTextColor(Color.WHITE);
+            }
+        } else {
+            holder.cardView.setCardBackgroundColor(Color.WHITE);
+            holder.articleTextView.setTextColor(Color.GRAY);
+            holder.authorTextView.setTextColor(Color.GRAY);
+            holder.dateTextView.setTextColor(Color.DKGRAY);
+            holder.bodyLayout.setBackgroundResource(R.color.colorPrimaryLight);
+            if(currentNews.isViewed()) {
+                holder.titleTextView.setTextColor(Color.GRAY);
+            } else {
+                holder.titleTextView.setTextColor(Color.BLACK);
+            }
+        }
+    }
 
 
 //    private void setTextSize(ViewHolder holder) {
